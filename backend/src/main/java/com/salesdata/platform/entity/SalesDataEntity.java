@@ -53,6 +53,17 @@ public class SalesDataEntity {
   @Min(value = 1, message = "Quantity must be at least 1")
   private Integer quantity;
 
+  @Column(name = "total_amount", precision = 10, scale = 2)
+  private BigDecimal totalAmount;
+
   @Column(name = "created_at")
   private LocalDateTime createdAt = LocalDateTime.now();
+
+  @PrePersist
+  @PreUpdate
+  private void calculateTotalAmount() {
+    if (productPrice != null && quantity != null) {
+      this.totalAmount = productPrice.multiply(BigDecimal.valueOf(quantity));
+    }
+  }
 }

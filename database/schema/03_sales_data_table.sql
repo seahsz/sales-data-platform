@@ -13,6 +13,7 @@ CREATE TABLE sales_data(
     sale_location VARCHAR(255),
     sale_date DATE NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
+    total_amount DECIMAL(10,2) GENERATED ALWAYS AS (product_price * quantity) STORED,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
