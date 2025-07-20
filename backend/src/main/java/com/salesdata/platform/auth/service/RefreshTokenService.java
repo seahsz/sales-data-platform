@@ -47,7 +47,7 @@ public class RefreshTokenService {
       String formattedExpiryDate =
           refreshToken.getExpiryDate().format(DateTimeConstants.STANDARD_DATETIME_FORMATTER);
       throw new RefreshTokenException.ExpiredRefreshTokenException(
-          "Token expired on " + formattedExpiryDate);
+          "Refresh token expired on " + formattedExpiryDate);
     }
     return refreshToken;
   }

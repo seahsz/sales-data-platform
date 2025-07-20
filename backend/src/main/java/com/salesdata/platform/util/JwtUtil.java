@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -68,6 +69,12 @@ public class JwtUtil {
     }
   }
 
+  // Key method to check if token is valid -> same username + not expired
+  public boolean isTokenValid(String token, UserDetails userDetails) {
+    final String username = getUsernameFromToken(token);
+    return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+  }
+
   // Generic method to extract any claim
   private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = getClaimsFromToken(token);
@@ -102,4 +109,8 @@ public class JwtUtil {
   public Date getRefreshTokenExpiryDate() {
     return new Date(System.currentTimeMillis() + Long.parseLong(refreshTokenExpiration));
   }
+
+  private boolean isTokenExpired(String token) {
+    return getExpirationDateFromToken(token).before(new Date());
+  };
 }
