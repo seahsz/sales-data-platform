@@ -1,0 +1,55 @@
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: sales-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: salesdata
+      MYSQL_USER: salesuser
+      MYSQL_PASSWORD: salespass
+    ports:
+      - "3307:3306" # using port 3307 to avoid conflicts with local mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sales-network
+
+  # Spring Boot Backend (for future use)
+  backend:
+    build: ./backend
+    container_name: sales-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/salesdata
+      - SPRING_DATASOURCE_USERNAME=salesuser
+      - SPRING_DATASOURCE_PASSWORD=salespass
+    depends_on:
+      - mysql
+    networks:
+      - sales-network
+    profiles:
+      - full-stack
+
+  # React Frontend (for future use)
+  frontend:
+    build: ./frontend
+    container_name: sales-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=httpL//localhost:8080
+    depends_on:
+      - backend
+    networks:
+      - sales-network
+    profiles:
+      - full-stack
+
+volumes:
+  mysql_data:
+
+networks:
+  sales-network:
+    driver: bridge
