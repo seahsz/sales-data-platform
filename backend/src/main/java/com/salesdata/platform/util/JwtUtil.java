@@ -112,5 +112,6 @@ public class JwtUtil {
 
   private boolean isTokenExpired(String token) {
     return getExpirationDateFromToken(token).before(new Date());
-  };
+  }
+  ;
 }

@@ -7,6 +7,7 @@ import com.salesdata.platform.auth.entity.RefreshTokenEntity;
 import com.salesdata.platform.auth.repository.UserRepository;
 import com.salesdata.platform.entity.UserEntity;
 import com.salesdata.platform.util.JwtUtil;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Slf4j
 @Service
@@ -35,14 +34,22 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     // Find user in database
-    UserEntity user = userRepository.findByUsername(username)
+    UserEntity user =
+        userRepository
+            .findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
     return User.builder()
-            .username(user.getUsername())
-            .password(user.getPassword())
-            .authorities(new ArrayList<>()) // Empty for now, we will add roles later
-            .build();
+        .username(user.getUsername())
+        .password(user.getPassword())
+        .authorities(new ArrayList<>()) // Empty for now, we will add roles later
+        .build();
+  }
+
+  public UserEntity findUserByUsername(String username) {
+    return userRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
   }
 
   public AuthResponse register(RegisterRequest request) {
@@ -56,11 +63,10 @@ public class UserService implements UserDetailsService {
 
     // Create new user
     UserEntity userEntity =
-        UserEntity.builder()
-            .username(request.getUsername())
-            .email(request.getEmail())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .build();
+        new UserEntity(
+            request.getUsername(),
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()));
 
     UserEntity savedUserEntity = userRepository.save(userEntity);
 
