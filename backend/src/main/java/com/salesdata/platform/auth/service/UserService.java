@@ -1,6 +1,7 @@
 package com.salesdata.platform.auth.service;
 
 import com.salesdata.platform.auth.dto.AuthResponse;
+import com.salesdata.platform.auth.dto.CustomUserDetails;
 import com.salesdata.platform.auth.dto.LoginRequest;
 import com.salesdata.platform.auth.dto.RegisterRequest;
 import com.salesdata.platform.auth.entity.RefreshTokenEntity;
@@ -32,18 +33,19 @@ public class UserService implements UserDetailsService {
   private Long accessTokenExpiration;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     // Find user in database
     UserEntity user =
         userRepository
             .findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-    return User.builder()
-        .username(user.getUsername())
-        .password(user.getPassword())
-        .authorities(new ArrayList<>()) // Empty for now, we will add roles later
-        .build();
+    return CustomUserDetails.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .password(user.getPassword())
+            .authorities(new ArrayList<>())
+            .build();
   }
 
   public UserEntity findUserByUsername(String username) {

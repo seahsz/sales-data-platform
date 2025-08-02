@@ -5,19 +5,19 @@
 USE salesdata;
 
 CREATE TABLE sales_data(
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
-    file_upload_id BIGINT NOT NULL,
-    product_name VARCHAR(255) NOT NULL,
-    product_price DECIMAL(10,2) NOT NULL,
-    sale_location VARCHAR(255),
-    sale_date DATE NOT NULL,
-    quantity INT NOT NULL DEFAULT 1,
-    total_amount DECIMAL(10,2) GENERATED ALWAYS AS (product_price * quantity) STORED,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           user_id BIGINT NOT NULL,
+                           file_upload_id BIGINT NOT NULL,
+                           product_name VARCHAR(255) NOT NULL,
+                           product_price DECIMAL(10,2) NOT NULL,
+                           sale_location VARCHAR(255),
+                           sale_date DATE NOT NULL,
+                           quantity INT NOT NULL DEFAULT 1,
+                           total_amount DECIMAL(10,2),
+                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (file_upload_id) REFERENCES file_uploads(id) ON DELETE CASCADE
+                           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                           FOREIGN KEY (file_upload_id) REFERENCES file_uploads(id) ON DELETE CASCADE
 );
 
 -- Add indexes for common queries
