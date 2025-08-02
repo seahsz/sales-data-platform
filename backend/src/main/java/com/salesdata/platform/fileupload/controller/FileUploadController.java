@@ -5,12 +5,10 @@ import com.salesdata.platform.auth.dto.CustomUserDetails;
 import com.salesdata.platform.fileupload.FileUploadService;
 import com.salesdata.platform.fileupload.dto.FileUploadEntity;
 import com.salesdata.platform.fileupload.dto.UserFileStats;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,14 +31,15 @@ public class FileUploadController {
   /** Upload a CSV file */
   @PostMapping("/upload")
   public ResponseEntity<Map<String, Object>> uploadFile(
-          @RequestParam("file") MultipartFile file, @CurrentUser CustomUserDetails userDetails) {
+      @RequestParam("file") MultipartFile file, @CurrentUser CustomUserDetails userDetails) {
 
     Map<String, Object> response = new HashMap<>();
 
     try {
       Long userId = userDetails.getId();
 
-      log.info("File upload request from user: {} for file: {}", userId, file.getOriginalFilename());
+      log.info(
+          "File upload request from user: {} for file: {}", userId, file.getOriginalFilename());
 
       // Upload and process file
       FileUploadEntity fileUploadEntity = fileUploadService.uploadFile(file, userId);
@@ -72,7 +71,8 @@ public class FileUploadController {
   }
 
   @GetMapping
-  public ResponseEntity<Map<String, Object>> getUserFiles(@CurrentUser CustomUserDetails userDetails) {
+  public ResponseEntity<Map<String, Object>> getUserFiles(
+      @CurrentUser CustomUserDetails userDetails) {
     Map<String, Object> response = new HashMap<>();
 
     try {
@@ -81,7 +81,7 @@ public class FileUploadController {
 
       response.put(SUCCESS_CONSTANT, true);
       response.put("files", files);
-      response.put("count",  files.size());
+      response.put("count", files.size());
 
       return ResponseEntity.ok(response);
 
@@ -93,12 +93,10 @@ public class FileUploadController {
     }
   }
 
-  /**
-   * Get specific file details
-   */
+  /** Get specific file details */
   @GetMapping("/{fileId}")
   public ResponseEntity<Map<String, Object>> getFileDetails(
-          @PathVariable Long fileId, @CurrentUser CustomUserDetails userDetails) {
+      @PathVariable Long fileId, @CurrentUser CustomUserDetails userDetails) {
 
     Map<String, Object> response = new HashMap<>();
 
@@ -127,12 +125,10 @@ public class FileUploadController {
     }
   }
 
-  /**
-   * Delete a file and its associated data
-   */
+  /** Delete a file and its associated data */
   @DeleteMapping("/{fileId}")
   public ResponseEntity<Map<String, Object>> deleteFile(
-          @PathVariable Long fileId, @CurrentUser CustomUserDetails userDetails) {
+      @PathVariable Long fileId, @CurrentUser CustomUserDetails userDetails) {
 
     Map<String, Object> response = new HashMap<>();
 
@@ -159,11 +155,10 @@ public class FileUploadController {
     }
   }
 
-  /**
-   * Get user file statistics
-   */
+  /** Get user file statistics */
   @GetMapping("/stats")
-  public ResponseEntity<Map<String, Object>> getFileStats(@CurrentUser CustomUserDetails userDetails) {
+  public ResponseEntity<Map<String, Object>> getFileStats(
+      @CurrentUser CustomUserDetails userDetails) {
     Map<String, Object> response = new HashMap<>();
 
     try {
@@ -171,7 +166,9 @@ public class FileUploadController {
       UserFileStats stats = fileUploadService.getUserFileStatistics(userId);
 
       response.put(SUCCESS_CONSTANT, true);
-      response.put("stats", Map.of(
+      response.put(
+          "stats",
+          Map.of(
               "totalFiles", stats.totalFiles(),
               "totalRecordsProcessed", stats.totalRecordsProcessed(),
               "successfulUploads", stats.successfulUploads(),
@@ -179,8 +176,7 @@ public class FileUploadController {
               "pendingUploads", stats.pendingUploads(),
               "successRate", stats.successRate(),
               "hasFailures", stats.hasFailures(),
-              "hasUploads", stats.hasUploads()
-      ));
+              "hasUploads", stats.hasUploads()));
       return ResponseEntity.ok(response);
 
     } catch (Exception e) {
@@ -190,5 +186,4 @@ public class FileUploadController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
   }
-
 }

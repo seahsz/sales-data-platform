@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,11 +39,11 @@ public class UserService implements UserDetailsService {
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
     return CustomUserDetails.builder()
-            .id(user.getId())
-            .username(user.getUsername())
-            .password(user.getPassword())
-            .authorities(new ArrayList<>())
-            .build();
+        .id(user.getId())
+        .username(user.getUsername())
+        .password(user.getPassword())
+        .authorities(new ArrayList<>())
+        .build();
   }
 
   public UserEntity findUserByUsername(String username) {
