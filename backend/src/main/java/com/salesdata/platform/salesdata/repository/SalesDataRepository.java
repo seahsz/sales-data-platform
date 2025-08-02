@@ -50,7 +50,7 @@ public interface SalesDataRepository extends JpaRepository<SalesDataEntity, Long
   // BATCH OPERATIONS
 
   /** Delete all sales records for a specific file upload */
-  void deleteByFileUploadId(Long fileUploadId);
+  int deleteByFileUploadId(Long fileUploadId);
 
   /** Find all sales records from a specific file upload */
   List<SalesDataEntity> findByFileUploadIdOrderBySaleDateDesc(Long fileUploadId);
