@@ -1,4 +1,4 @@
-package com.salesdata.platform.fileupload;
+package com.salesdata.platform.fileupload.service;
 
 import com.salesdata.platform.fileupload.dto.CSVProcessingResult;
 import com.salesdata.platform.fileupload.dto.FileUploadEntity;
@@ -8,7 +8,7 @@ import com.salesdata.platform.salesdata.repository.SalesDataRepository;
 import com.salesdata.platform.util.CSVProcessor;
 import java.util.List;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FileUploadService {
 
   private final FileUploadRepository fileUploadRepository;
@@ -211,7 +211,7 @@ public class FileUploadService {
       fileUploadEntity.markAsFailed("Unexpected error during processing: " + e.getMessage());
     } finally {
       // Always save the final state
-      fileUploadRepository.saveAndFlush(fileUploadEntity);
+      fileUploadRepository.save(fileUploadEntity);
     }
   }
 }

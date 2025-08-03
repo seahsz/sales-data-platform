@@ -2,9 +2,9 @@ package com.salesdata.platform.fileupload.controller;
 
 import com.salesdata.platform.auth.annotation.CurrentUser;
 import com.salesdata.platform.auth.dto.CustomUserDetails;
-import com.salesdata.platform.fileupload.FileUploadService;
 import com.salesdata.platform.fileupload.dto.FileUploadEntity;
 import com.salesdata.platform.fileupload.dto.UserFileStats;
+import com.salesdata.platform.fileupload.service.FileUploadService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

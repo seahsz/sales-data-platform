@@ -43,6 +43,8 @@ public class SecurityConfig {
                     .authenticated()
                     .requestMatchers("/api/sales/**")
                     .authenticated()
+                    .requestMatchers("/api/files/**")
+                    .authenticated()
                     .anyRequest()
                     .authenticated())
         // Add JWT Filter BEFORE Spring Security's username/password filter
